@@ -24,7 +24,9 @@ public class StudentDAO {
                 ps.setObject(i + 1, params.get(i));
             }
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return rs.getInt(1);
+                if (rs.next()) {
+					return rs.getInt(1);
+				}
             }
         }
         return 0;
@@ -60,7 +62,9 @@ public class StudentDAO {
              PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, id);
             try (ResultSet rs = ps.executeQuery()) {
-                if (rs.next()) return mapStudent(rs);
+                if (rs.next()) {
+					return mapStudent(rs);
+				}
             }
         }
         return null;
@@ -161,7 +165,9 @@ public class StudentDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getInt(1);
+            if (rs.next()) {
+				return rs.getInt(1);
+			}
         }
         return 0;
     }
@@ -171,7 +177,9 @@ public class StudentDAO {
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
              ResultSet rs = ps.executeQuery()) {
-            if (rs.next()) return rs.getInt(1);
+            if (rs.next()) {
+				return rs.getInt(1);
+			}
         }
         return 0;
     }

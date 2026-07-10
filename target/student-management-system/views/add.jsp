@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="jakarta.tags.core" prefix="c" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,14 +9,9 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
+    <%@ include file="header.jspf" %>
     <div class="container">
-        <header class="header">
-            <h1>Add New Student</h1>
-        </header>
-
-        <nav class="nav-bar">
-            <a href="${pageContext.request.contextPath}/students?action=list" class="btn btn-secondary">&larr; Back to List</a>
-        </nav>
+        <h2 class="page-title">Add New Student</h2>
 
         <form action="${pageContext.request.contextPath}/students" method="post" class="student-form" onsubmit="return validateForm()">
             <input type="hidden" name="action" value="insert">
@@ -63,7 +59,14 @@
 
                 <div class="form-group">
                     <label for="course">Course <span class="required">*</span></label>
-                    <input type="text" id="course" name="course" required>
+                    <select id="course" name="course" required>
+                        <option value="">Select Course</option>
+                        <c:forEach var="c" items="${courses}">
+                            <option value="${c}">${c}</option>
+                        </c:forEach>
+                        <option value="other">-- Other --</option>
+                    </select>
+                    <input type="text" id="courseOther" name="courseOther" placeholder="Enter custom course" style="display:none; margin-top:6px;">
                 </div>
 
                 <div class="form-group">
@@ -96,5 +99,19 @@
     </div>
 
     <script src="${pageContext.request.contextPath}/assets/js/validation.js"></script>
+    <script>
+        document.getElementById('course').addEventListener('change', function() {
+            var otherInput = document.getElementById('courseOther');
+            if (this.value === 'other') {
+                otherInput.style.display = 'block';
+                otherInput.name = 'course';
+                this.name = '';
+            } else {
+                otherInput.style.display = 'none';
+                otherInput.name = 'courseOther';
+                this.name = 'course';
+            }
+        });
+    </script>
 </body>
 </html>

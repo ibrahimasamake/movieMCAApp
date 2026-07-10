@@ -29,7 +29,9 @@ public class StudentServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String action = req.getParameter("action");
-        if (action == null) action = "list";
+        if (action == null) {
+			action = "list";
+		}
 
         switch (action) {
             case "add":
@@ -54,7 +56,9 @@ public class StudentServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String action = req.getParameter("action");
-        if (action == null) action = "list";
+        if (action == null) {
+			action = "list";
+		}
 
         switch (action) {
             case "insert":
@@ -81,11 +85,15 @@ public class StudentServlet extends HttpServlet {
             if (pageStr != null) {
                 try { page = Integer.parseInt(pageStr); } catch (NumberFormatException e) { page = 1; }
             }
-            if (page < 1) page = 1;
+            if (page < 1) {
+				page = 1;
+			}
 
             int totalStudents = studentDAO.countStudents(search, course, status);
             int totalPages = (int) Math.ceil((double) totalStudents / PAGE_SIZE);
-            if (page > totalPages && totalPages > 0) page = totalPages;
+            if (page > totalPages && totalPages > 0) {
+				page = totalPages;
+			}
 
             List<Student> students = studentDAO.getStudents(page, PAGE_SIZE, search, course, status);
             List<String> courses = studentDAO.getAllCourses();
@@ -188,7 +196,9 @@ public class StudentServlet extends HttpServlet {
     }
 
     private String csvEscape(String value) {
-        if (value == null) return "";
+        if (value == null) {
+			return "";
+		}
         if (value.contains(",") || value.contains("\"") || value.contains("\n")) {
             return "\"" + value.replace("\"", "\"\"") + "\"";
         }

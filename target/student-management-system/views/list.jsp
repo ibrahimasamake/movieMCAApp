@@ -9,21 +9,41 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/style.css">
 </head>
 <body>
+    <%@ include file="header.jspf" %>
     <div class="container">
-        <header class="header">
-            <h1>Student Management System</h1>
-        </header>
+        <div class="header">
+            <h1>Students</h1>
+            <span class="header-subtitle">${totalStudents} record(s) found</span>
+        </div>
 
         <div class="toolbar">
             <div class="toolbar-left">
                 <a href="${pageContext.request.contextPath}/students?action=add" class="btn btn-primary">+ Add New Student</a>
+                <a href="${pageContext.request.contextPath}/students?action=export&search=${param.search}&course=${param.course}&status=${param.status}"
+                   class="btn btn-export">Export CSV</a>
             </div>
             <div class="toolbar-right">
-                <form action="${pageContext.request.contextPath}/students" method="get" class="search-form">
+                <form action="${pageContext.request.contextPath}/students" method="get" class="filter-form">
                     <input type="hidden" name="action" value="list">
-                    <input type="text" name="search" placeholder="Search by name, code or email..."
+                    <input type="text" name="search" placeholder="Search..."
                            value="${param.search}" class="search-input">
-                    <button type="submit" class="btn btn-search">Search</button>
+                    <select name="course" class="filter-select">
+                        <option value="">All Courses</option>
+                        <c:forEach var="c" items="${courses}">
+                            <option value="${c}" ${param.course == c ? 'selected' : ''}>${c}</option>
+                        </c:forEach>
+                    </select>
+                    <select name="status" class="filter-select">
+                        <option value="">All Statuses</option>
+                        <option value="Active" ${param.status == 'Active' ? 'selected' : ''}>Active</option>
+                        <option value="Inactive" ${param.status == 'Inactive' ? 'selected' : ''}>Inactive</option>
+                        <option value="Graduated" ${param.status == 'Graduated' ? 'selected' : ''}>Graduated</option>
+                        <option value="Suspended" ${param.status == 'Suspended' ? 'selected' : ''}>Suspended</option>
+                    </select>
+                    <button type="submit" class="btn btn-search">Filter</button>
+                    <c:if test="${not empty param.search or not empty param.course or not empty param.status}">
+                        <a href="${pageContext.request.contextPath}/students?action=list" class="btn btn-secondary">Clear</a>
+                    </c:if>
                 </form>
             </div>
         </div>
@@ -74,6 +94,20 @@
                 </c:choose>
             </tbody>
         </table>
+
+        <c:if test="${totalPages > 1}">
+            <div class="pagination">
+                <c:if test="${currentPage > 1}">
+                    <a href="${pageContext.request.contextPath}/students?action=list&page=${currentPage - 1}&search=${param.search}&course=${param.course}&status=${param.status}"
+                       class="btn btn-sm btn-secondary">&laquo; Prev</a>
+                </c:if>
+                <span class="page-info">Page ${currentPage} of ${totalPages}</span>
+                <c:if test="${currentPage < totalPages}">
+                    <a href="${pageContext.request.contextPath}/students?action=list&page=${currentPage + 1}&search=${param.search}&course=${param.course}&status=${param.status}"
+                       class="btn btn-sm btn-secondary">Next &raquo;</a>
+                </c:if>
+            </div>
+        </c:if>
     </div>
 </body>
 </html>
